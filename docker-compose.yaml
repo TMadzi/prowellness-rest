@@ -1,14 +1,4 @@
 services:
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: example
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
   api:
     build:
       dockerfile: Dockerfile
@@ -19,9 +9,7 @@ services:
         - .env
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
-    volumes:
-      - .:/usr/src/app
-      - ./usr/src/app/node_modules # This is the only change
+      # This is the only change
     # Run in dev Mode: npm run start:dev
     command: npm run start:dev
     ports:
