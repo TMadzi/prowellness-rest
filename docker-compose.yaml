@@ -1,5 +1,6 @@
 services:
   api:
+    container_name: api
     build:
       dockerfile: Dockerfile
       context: .
@@ -13,7 +14,7 @@ services:
     # Run in dev Mode: npm run start:dev
     command: npm run start:dev
     ports:
-      - 3000:3000
+      - 3001:3001
     depends_on:
       - redis
       - postgres
@@ -24,20 +25,22 @@ services:
     volumes: 
       - redis:/data
   postgres:
-    container_name: pg_container
-    image: postgres
+    container_name: pg_container1
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: prowellness
       PGDATA: /data/postgres
-    ports:
-      - 5444:5444"
     volumes:
-       - prowellness:/var/lib/postgresql/data
+       - postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
   pgadmin:
-    container_name: pgadmin4_container
+    container_name: pgadmin4_container1
     image: dpage/pgadmin4
     restart: always
     environment:
@@ -45,8 +48,14 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
 volumes:
   pgadmin:
   redis:
     driver: local
-  prowellness:
+  postgres:
