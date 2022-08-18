@@ -32,12 +32,10 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: prowellness
       PGDATA: /data/postgres
-    volumes:
-       - postgres:/data/postgres
     ports:
-      - "5432:5432"
-    networks:
-      - postgres
+      - 5444:5444"
+    volumes:
+       - prowellness:/var/lib/postgresql/data
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
@@ -47,12 +45,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
-networks:
-  postgres:
-    driver: bridge
-
 volumes:
-  postgres:
   pgadmin:
   redis:
     driver: local
+  prowellness:
